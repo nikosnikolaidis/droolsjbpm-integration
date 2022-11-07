@@ -24,12 +24,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gson.JsonObject;
 import org.drools.core.impl.EnvironmentFactory;
 import org.drools.core.impl.KnowledgeBaseFactory;
 import org.eclipse.bpmn2.FlowElement;
 import org.jbpm.simulation.PathContext;
 import org.jbpm.simulation.impl.SimulationNodeInstanceFactoryRegistry;
-import org.json.JSONObject;
 import org.kie.api.KieBase;
 import org.kie.api.KieServices;
 import org.kie.api.builder.KieBuilder;
@@ -99,7 +99,7 @@ public class TestUtils {
         }
     }
     
-    public static void printOutPaths(List<PathContext> paths, JSONObject jsonPaths, String name) {
+    public static void printOutPaths(List<PathContext> paths, JsonObject jsonPaths, String name) {
         if (!"true".equalsIgnoreCase(System.getProperty("test.debug.off"))) {
             System.out.println("###################" + name + "###################");
             for (PathContext context : paths) {

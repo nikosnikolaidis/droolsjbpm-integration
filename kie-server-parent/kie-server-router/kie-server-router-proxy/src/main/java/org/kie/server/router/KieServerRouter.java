@@ -33,15 +33,16 @@ import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.SSLContext;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.jboss.logging.Logger;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.kie.server.router.handlers.AdminHttpHandler;
 import org.kie.server.router.handlers.ContainersHttpHandler;
 import org.kie.server.router.handlers.DocumentsHttpHandler;
@@ -367,18 +368,18 @@ public class KieServerRouter {
         }
     }
 
-    protected void boostrapFromControllerResponse(ConfigurationManager configurationManager, String jsonResponse) throws JSONException {
+    protected void boostrapFromControllerResponse(ConfigurationManager configurationManager, String jsonResponse) {
         List<String> containers = new ArrayList<>();
 
-        JSONObject serverConfig = new JSONObject(jsonResponse);
+        JsonObject serverConfig = JsonParser.parseString(jsonResponse).getAsJsonObject();
         try {
-            JSONArray sourceList = serverConfig.getJSONArray("containers");
+            JsonArray sourceList = serverConfig.getAsJsonArray("containers");
 
-            for (int i = 0; i < sourceList.length(); i++) {
-                JSONObject container = sourceList.getJSONObject(i);
-                containers.add(container.getString("container-id"));
+            for (int i = 0; i < sourceList.size(); i++) {
+                JsonObject container = sourceList.get(i).getAsJsonObject();
+                containers.add(container.get("container-id").toString());
             }
-        } catch (JSONException e) {
+        } catch (JsonParseException e) {
             // if the server template did not exist the containers can be null, meaning not JSONArray
             log.debug("Error when getting list of containers:: " + e.getMessage(), e);
         }

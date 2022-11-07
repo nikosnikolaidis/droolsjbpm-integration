@@ -24,10 +24,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
 import org.jbpm.simulation.converter.JSONPathFormatConverter;
 import org.jbpm.simulation.helper.TestUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,11 +56,11 @@ public class PathFinderTest {
         assertEquals(1, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(1, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(1, (jsonPaths.get("paths").getAsJsonObject()).size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -107,11 +107,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(2, (jsonPaths.get("paths").getAsJsonObject()).size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -217,11 +217,11 @@ public class PathFinderTest {
         assertEquals(7, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4, expectedIds5, expectedIds6, expectedIds7));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-			assertEquals(7, ((JSONObject)jsonPaths.get("paths")).length());
-		} catch (JSONException e) {
+			assertEquals(7, (jsonPaths.get("paths").getAsJsonObject()).size());
+		} catch (JsonIOException e) {
 			fail(e.getMessage());
 		}
         
@@ -251,11 +251,11 @@ public class PathFinderTest {
         assertEquals(1, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-			assertEquals(1, ((JSONObject)jsonPaths.get("paths")).length());
-		} catch (JSONException e) {
+			assertEquals(1, (jsonPaths.get("paths").getAsJsonObject()).size());
+		} catch (JsonIOException e) {
 			fail(e.getMessage());
 		}
         
@@ -308,11 +308,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-			assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-		} catch (JSONException e) {
+			assertEquals(2, (jsonPaths.get("paths").getAsJsonObject()).size());
+		} catch (JsonIOException e) {
 			fail(e.getMessage());
 		}
         
@@ -348,11 +348,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-			assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-		} catch (JSONException e) {
+			assertEquals(2, (jsonPaths.get("paths").getAsJsonObject()).size());
+		} catch (JsonIOException e) {
 			fail(e.getMessage());
 		}
         
@@ -404,11 +404,11 @@ public class PathFinderTest {
         assertEquals(3, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-			assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
-		} catch (JSONException e) {
+			assertEquals(3, (jsonPaths.get("paths").getAsJsonObject()).size());
+		} catch (JsonIOException e) {
 			fail(e.getMessage());
 		}
         
@@ -443,11 +443,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-			assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-		} catch (JSONException e) {
+			assertEquals(2, (jsonPaths.get("paths").getAsJsonObject()).size());
+		} catch (JsonIOException e) {
 			fail(e.getMessage());
 		}
         
@@ -496,12 +496,12 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         
         try {
-			assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-		} catch (JSONException e) {
+			assertEquals(2, (jsonPaths.get("paths").getAsJsonObject()).size());
+		} catch (JsonIOException e) {
 			fail(e.getMessage());
 		}
         
@@ -546,11 +546,11 @@ public class PathFinderTest {
         assertEquals(5, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4, expectedIds5));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-			assertEquals(5, ((JSONObject)jsonPaths.get("paths")).length());
-		} catch (JSONException e) {
+			assertEquals(5, (jsonPaths.get("paths").getAsJsonObject()).size());
+		} catch (JsonIOException e) {
 			fail(e.getMessage());
 		}
         
@@ -588,11 +588,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(2, (jsonPaths.get("paths").getAsJsonObject()).size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -648,11 +648,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(2, (jsonPaths.get("paths").getAsJsonObject()).size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -690,11 +690,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(2, (jsonPaths.get("paths").getAsJsonObject()).size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -723,11 +723,11 @@ public class PathFinderTest {
         assertEquals(1, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(1, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(1, (jsonPaths.get("paths").getAsJsonObject().size()));
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -760,11 +760,11 @@ public class PathFinderTest {
         assertEquals(1, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(1, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(1, (jsonPaths.get("paths").getAsJsonObject()).size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -823,11 +823,11 @@ public class PathFinderTest {
         assertEquals(3, paths.size());
         assertTrue("Found activities do not match expected", TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(3, (jsonPaths.get("paths").getAsJsonObject()).size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -907,11 +907,11 @@ public class PathFinderTest {
         assertEquals(3, paths.size());
         assertTrue("Found activities do not match expected", TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(3, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -956,11 +956,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(2, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -1073,11 +1073,11 @@ public class PathFinderTest {
         assertEquals(4, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(4, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(4, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -1147,11 +1147,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(2, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -1218,11 +1218,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(2, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -1348,11 +1348,11 @@ public class PathFinderTest {
         assertEquals(4, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(4, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(4, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -1480,11 +1480,11 @@ public class PathFinderTest {
         assertEquals(5, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds1, expectedIds2, expectedIds3, expectedIds4, expectedIds5));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(5, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(5, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -1538,11 +1538,11 @@ public class PathFinderTest {
         assertEquals(3, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(3, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -1578,11 +1578,11 @@ public class PathFinderTest {
         assertEquals(2, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds, expectedIds2));
         
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(2, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(2, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
         
@@ -1602,11 +1602,11 @@ public class PathFinderTest {
         assertNotNull(paths);
         assertEquals(6, paths.size());
 
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(6, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(6, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
 
@@ -1630,11 +1630,11 @@ public class PathFinderTest {
             assertEquals(15, context.getPathElements().size());
         }
 
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(4, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(4, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
 
@@ -1684,11 +1684,11 @@ public class PathFinderTest {
         assertEquals(3, paths.size());
         assertTrue(TestUtils.matchExpected(paths, expectedIds, expectedIds2, expectedIds3));
 
-        JSONObject jsonPaths = new JSONPathFormatConverter().convert(paths);
+        JsonObject jsonPaths = new JSONPathFormatConverter().convert(paths);
         assertNotNull(jsonPaths);
         try {
-            assertEquals(3, ((JSONObject)jsonPaths.get("paths")).length());
-        } catch (JSONException e) {
+            assertEquals(3, jsonPaths.get("paths").getAsJsonObject().size());
+        } catch (JsonIOException e) {
             fail(e.getMessage());
         }
 

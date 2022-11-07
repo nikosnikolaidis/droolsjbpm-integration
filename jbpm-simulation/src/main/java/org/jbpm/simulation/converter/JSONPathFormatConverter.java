@@ -18,25 +18,25 @@ package org.jbpm.simulation.converter;
 import java.util.List;
 import java.util.Set;
 
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
 import org.eclipse.bpmn2.FlowElement;
 import org.jbpm.simulation.PathContext;
 import org.jbpm.simulation.PathFormatConverter;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-public class JSONPathFormatConverter implements PathFormatConverter<JSONObject> {
+public class JSONPathFormatConverter implements PathFormatConverter<JsonObject> {
 
-    public JSONObject convert(List<PathContext> completePaths) {
-        JSONObject parent = new JSONObject();
-        JSONObject paths = new JSONObject();
+    public JsonObject convert(List<PathContext> completePaths) {
+        JsonObject parent = new JsonObject();
+        JsonObject paths = new JsonObject();
         try {
             if(completePaths != null && !completePaths.isEmpty()) {
                 for(PathContext pc : completePaths) {
-                    paths.put(pc.getPathId(), getPathFlowElementsAsString(pc.getPathElements()));
+                    paths.addProperty(pc.getPathId(), getPathFlowElementsAsString(pc.getPathElements()));
                 }
             }
-            parent.put("paths", paths);
-        } catch (JSONException e) {
+            parent.add("paths",paths);
+        } catch (JsonIOException e) {
             // TODO need logging
             e.printStackTrace();
         }

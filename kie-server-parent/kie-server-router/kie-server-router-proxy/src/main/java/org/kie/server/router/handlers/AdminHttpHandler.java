@@ -15,8 +15,9 @@
 
 package org.kie.server.router.handlers;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jboss.logging.Logger;
-import org.json.JSONObject;
 import org.kie.server.router.ConfigurationManager;
 import org.kie.server.router.KieServerRouterEnvironment;
 import org.kie.server.router.utils.HttpUtils;
@@ -52,13 +53,13 @@ public class AdminHttpHandler implements HttpHandler {
         
         exchange.getRequestReceiver().receiveFullString((ex, data) -> {
             try {
-                JSONObject jsonData = new JSONObject(data);
+                JsonObject jsonData = JsonParser.parseString(data).getAsJsonObject();
 
-                String containerId = jsonData.getString("containerId");
-                String alias = jsonData.getString("alias");
-                String serverId = jsonData.getString("serverId");
-                String serverUrl = jsonData.getString("serverUrl");
-                String releaseId = jsonData.getString("releaseId");
+                String containerId = jsonData.get("containerId").getAsString();
+                String alias = jsonData.get("alias").getAsString();
+                String serverId = jsonData.get("serverId").getAsString();
+                String serverUrl = jsonData.get("serverUrl").getAsString();
+                String releaseId = jsonData.get("releaseId").getAsString();
                 if (path.startsWith("/add")) {
                     log.infof("Added %s as server location for container %s ", serverUrl, containerId);
                     configurationManager.add(containerId, alias, serverId, serverUrl, releaseId);

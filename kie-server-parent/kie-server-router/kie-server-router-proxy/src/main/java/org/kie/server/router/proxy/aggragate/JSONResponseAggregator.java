@@ -15,17 +15,11 @@
 
 package org.kie.server.router.proxy.aggragate;
 
+import com.google.gson.*;
+
 import static org.kie.server.router.utils.Helper.readProperties;
 
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import java.util.*;
 
 public class JSONResponseAggregator implements ResponseAggregator {
 
@@ -43,7 +37,7 @@ public class JSONResponseAggregator implements ResponseAggregator {
     public String aggregate(List<String> data, String sortBy, boolean ascending, Integer page, Integer pageSize) {
 
         try {
-            JSONObject json = data.stream().map(s -> {
+            JsonObject json = data.stream().map(s -> {
                 return newJson(s);
             }).reduce((source, target) -> {
                 deepMerge(source, target);
@@ -53,10 +47,10 @@ public class JSONResponseAggregator implements ResponseAggregator {
             String response = sort(sortBy, ascending, page, pageSize, json);
 
             return response;
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalStateException e) {
             // try with sorting array
 
-            JSONArray jsonArray = data.stream().map(s -> {
+            JsonArray jsonArray = data.stream().map(s -> {
                 return newJsonArray(s);
             }).reduce((source, target) -> {
                 deepMergeArray(source, target);
@@ -70,92 +64,95 @@ public class JSONResponseAggregator implements ResponseAggregator {
 
     }
 
-    protected String sort(String fieldName, boolean ascending, Integer page, Integer pageSize, JSONObject source) {
+    protected String sort(String fieldName, boolean ascending, Integer page, Integer pageSize, JsonObject source) {
         try {
-            for (String key: JSONObject.getNames(source)) {
+            for (String key: source.keySet()){
                 Object value = source.get(key);
-                if (value instanceof JSONArray) {
-                    JSONArray array = (JSONArray) value;
+                if (value instanceof JsonArray) {
+                    JsonArray array = (JsonArray) value;
                     // apply sorting
-                    sortList(fieldName, array, ascending, page, pageSize);
+                    JsonArray jsonArray = sortList(fieldName, array, ascending, page, pageSize);
+                    //remove old and add new sorted
+                    source.remove(key);
+                    source.add(key,jsonArray);
                 }
             }
 
-            return source.toString(2);
+            return source.toString();
         } catch (Exception e) {
             throw new RuntimeException("Error while sorting and paging of json", e);
         }
     }
 
-    protected JSONObject deepMerge(JSONObject source, JSONObject target) {
+    protected JsonObject deepMerge(JsonObject source, JsonObject target) {
         try {
-            for (String key: JSONObject.getNames(source)) {
+            for (String key: source.keySet()){//JSONObject.getNames(source)) {
                 Object value = source.get(key);
                 if (!target.has(key)) {
                     // new value for "key":
-                    target.put(key, value);
+                    target.add(key, (JsonElement) value);
                 } else {
                     // existing value for "key" - recursively deep merge:
-                    if (value instanceof JSONObject) {
-                        JSONObject valueJson = (JSONObject)value;
-                        deepMerge(valueJson, target.getJSONObject(key));
+                    if (value instanceof JsonObject) {
+                        JsonObject valueJson = (JsonObject)value;
+                        deepMerge(valueJson, target.get(key).getAsJsonObject());
                     }
                     // insert each JSONArray's JSONObject in place
-                    else if (value instanceof JSONArray) {
-                        JSONArray jsonArray = ((JSONArray) value);
-                        for (int i = 0, size = jsonArray.length(); i < size; i++) {
-                            JSONObject objectInArray = jsonArray.getJSONObject(i);
-                            ((JSONArray) target.get(key)).put(objectInArray);
+                    else if (value instanceof JsonArray) {
+                        JsonArray jsonArray = ((JsonArray) value);
+                        for (int i = 0, size = jsonArray.size(); i < size; i++) {
+                            JsonObject objectInArray = jsonArray.get(i).getAsJsonObject();
+                            ((JsonArray) target.get(key)).add(objectInArray);
                         }
                     } else {
-                        target.put(key, value);
+                        target.add(key, (JsonElement) value);
                     }
                 }
             }
             return target;
-        } catch (JSONException e) {
+        } catch (JsonIOException e) {
             return null;
         }
     }
 
-    protected JSONArray deepMergeArray(JSONArray source, JSONArray target) {
+    protected JsonArray deepMergeArray(JsonArray source, JsonArray target) {
         try {
 
-            for (int i = 0, size = source.length(); i < size; i++) {
-                JSONArray objectInArray = source.getJSONArray(i);
-                target.put(objectInArray);
+            for (int i = 0, size = source.size(); i < size; i++) {
+                JsonArray objectInArray = source.get(i).getAsJsonArray();
+                target.add(objectInArray);
             }
             return target;
-        } catch (JSONException e) {
+        } catch (JsonIOException e) {
             return null;
         }
     }
 
-    protected String sortArray(String fieldName, boolean ascending, Integer page, Integer pageSize, JSONArray source) {
+    protected String sortArray(String fieldName, boolean ascending, Integer page, Integer pageSize, JsonArray source) {
         try {
             // apply sorting
-            sortList(fieldName, source, ascending, page, pageSize);
+            source = sortList(fieldName, source, ascending, page, pageSize);
 
-            return source.toString(2);
+            return source.toString();
         } catch (Exception e) {
             throw new RuntimeException("Error while sorting and paging of json", e);
         }
     }
 
-    protected JSONObject newJson(String data) {
+    protected JsonObject newJson(String data) {
         try {
 
-            return new JSONObject(data);
-        } catch (JSONException e) {
+            return JsonParser.parseString(data).getAsJsonObject();
+        } catch (JsonIOException e) {
             throw new IllegalArgumentException(e.getMessage(), e);
         }
     }
 
-    protected JSONArray newJsonArray(String data) {
+    protected JsonArray newJsonArray(String data) {
         try {
 
-            return new JSONArray(data);
-        } catch (JSONException e) {
+            return JsonParser.parseString(data).getAsJsonArray();
+        } catch (JsonIOException e) {
             throw new IllegalArgumentException(e.getMessage(), e);
         }
     }
@@ -175,25 +172,32 @@ public class JSONResponseAggregator implements ResponseAggregator {
         return false;
     }
 
-    protected void sortList(String fieldName, JSONArray array, boolean ascending, int page, int pageSize) throws Exception{
+    protected JsonArray sortList(String fieldName, JsonArray array, boolean ascending, int page, int pageSize) throws Exception{
 
-        Field f = array.getClass().getDeclaredField("myArrayList");
-        f.setAccessible(true);
-        List<?> jsonList = (List<?>) f.get(array);
+        Iterator<JsonElement> jsonElementIterator= array.iterator();
+        List<JsonElement> jsonObjects=new ArrayList<>();
+        jsonElementIterator.forEachRemaining(jsonElement -> {
+            if(jsonElement instanceof JsonObject){
+                jsonObjects.add(jsonElement.getAsJsonObject());
+            }
+            else{
+                jsonObjects.add(jsonElement.getAsJsonArray());
+            }
+        });
 
         if (fieldName != null && !fieldName.isEmpty()) {
             String sortBy = sortByMapping.getProperty(fieldName, fieldName);
 
 
-            Collections.sort(jsonList, new Comparator<Object>() {
+            Collections.sort(jsonObjects, new Comparator<JsonElement>() {
 
                 @SuppressWarnings({"rawtypes", "unchecked"})
                 @Override
-                public int compare(Object o1, Object o2) {
-                    if (o1 instanceof JSONObject && o2 instanceof JSONObject) {
+                public int compare(JsonElement o1, JsonElement o2) {
+                    if (o1 instanceof JsonObject && o2 instanceof JsonObject) {
                         try {
-                            Comparable v1 = (Comparable<?>)((JSONObject) o1).get(sortBy);
-                            Comparable v2 = (Comparable<?>)((JSONObject) o2).get(sortBy);
+                            Comparable v1 = (Comparable<?>)((JsonObject) o1).get(sortBy).getAsString();
+                            Comparable v2 = (Comparable<?>)((JsonObject) o2).get(sortBy).getAsString();
                             if (ascending) {
                                 return v1.compareTo(v2);
                             } else {
@@ -202,27 +206,44 @@ public class JSONResponseAggregator implements ResponseAggregator {
                         } catch (Exception e) {
 
                         }
-
-
                     }
+                    else if (o1 instanceof JsonArray && o2 instanceof JsonArray) {
+                        try {
+                            Comparable v1 = (Comparable<?>)((JsonArray) o1).get(0).getAsString();
+                            Comparable v2 = (Comparable<?>)((JsonArray) o2).get(0).getAsString();
+                            if (ascending) {
+                                return v1.compareTo(v2);
+                            } else {
+                                return v2.compareTo(v1);
+                            }
+                        } catch (Exception e) {
+
+                        }
+                    }
+
                     return 0;
                 }
             });
         }
+
         // calculate paging
         int start = page * pageSize;
         int end = start + pageSize;
         // apply paging
-        if (jsonList.size() < start) {
+        if (jsonObjects.size() < start) {
             // no elements in given range, return empty
-            jsonList.clear();
-        } else if (jsonList.size() >= end) {
-            List<?> tmp = jsonList.subList(start, end);
-            jsonList.retainAll(tmp);
-        } else if (jsonList.size() < end) {
-            List<?> tmp = jsonList.subList(start, jsonList.size());
-            jsonList.retainAll(tmp);
+            jsonObjects.clear();
+        } else if (jsonObjects.size() >= end) {
+            List<?> tmp = jsonObjects.subList(start, end);
+            jsonObjects.retainAll(tmp);
+        } else if (jsonObjects.size() < end) {
+            List<?> tmp = jsonObjects.subList(start, jsonObjects.size());
+            jsonObjects.retainAll(tmp);
         }
+
+        JsonArray jsonArray = new JsonArray();
+        jsonObjects.forEach(jsonObject -> jsonArray.add(jsonObject));
+        return jsonArray;
     }
 
 }

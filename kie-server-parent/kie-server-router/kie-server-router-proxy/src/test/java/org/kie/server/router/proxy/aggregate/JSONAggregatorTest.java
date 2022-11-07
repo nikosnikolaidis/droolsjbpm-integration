@@ -22,9 +22,10 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.jboss.logging.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.junit.Test;
 import org.kie.server.router.proxy.aggragate.JSONResponseAggregator;
 
@@ -46,15 +47,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("processes");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(8, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(8, processDefs.size());
     }
 
     @Test
@@ -71,15 +72,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("processes");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(5, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(5, processDefs.size());
     }
 
     @Test
@@ -96,15 +97,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("processes");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(3, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(3, processDefs.size());
     }
 
     @Test
@@ -121,15 +122,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("processes");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(0, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(0, processDefs.size());
     }
 
 
@@ -147,15 +148,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("process-instance");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(5, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(5, processDefs.size());
     }
 
     @Test
@@ -172,15 +173,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("process-instance");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(3, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(3, processDefs.size());
     }
 
     @Test
@@ -197,15 +198,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("process-instance");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(2, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(2, processDefs.size());
     }
 
     @Test
@@ -222,15 +223,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("process-instance");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(0, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(0, processDefs.size());
     }
 
     @Test
@@ -247,15 +248,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("task-summary");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(7, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(7, processDefs.size());
     }
 
     @Test
@@ -272,15 +273,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("task-summary");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(3, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(3, processDefs.size());
     }
 
     @Test
@@ -297,15 +298,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("task-summary");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(4, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(4, processDefs.size());
     }
 
     @Test
@@ -322,15 +323,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("task-summary");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(0, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(0, processDefs.size());
     }
 
     @Test
@@ -347,19 +348,19 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String sorted = aggregate.aggregate(data, "ProcessId", true, 0, 2);
         logger.debug(sorted);
 
-        JSONObject aggregated = new JSONObject(sorted);
+        JsonObject aggregated = JsonParser.parseString(sorted).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("processes");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(2, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(2, processDefs.size());
         // make sure it's properly sorted and paged
-        String value1 = ((JSONObject)processDefs.get(0)).getString("process-id");
+        String value1 = ((JsonObject)processDefs.get(0)).get("process-id").getAsString();
         assertEquals("1", value1);
-        String value2 = ((JSONObject)processDefs.get(1)).getString("process-id");
+        String value2 = ((JsonObject)processDefs.get(1)).get("process-id").getAsString();
         assertEquals("2", value2);
     }
 
@@ -377,19 +378,19 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String sorted = aggregate.aggregate(data, "ProcessId", false, 0, 2);
         logger.debug(sorted);
 
-        JSONObject aggregated = new JSONObject(sorted);
+        JsonObject aggregated = JsonParser.parseString(sorted).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("processes");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(2, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(2, processDefs.size());
         // make sure it's properly sorted and paged
-        String value1 = ((JSONObject)processDefs.get(0)).getString("process-id");
+        String value1 = ((JsonObject)processDefs.get(0)).get("process-id").getAsString();
         assertEquals("8", value1);
-        String value2 = ((JSONObject)processDefs.get(1)).getString("process-id");
+        String value2 = ((JsonObject)processDefs.get(1)).get("process-id").getAsString();
         assertEquals("7", value2);
     }
 
@@ -407,19 +408,19 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String sorted = aggregate.aggregate(data, "ProcessId", true, 1, 2);
         logger.debug(sorted);
 
-        JSONObject aggregated = new JSONObject(sorted);
+        JsonObject aggregated = JsonParser.parseString(sorted).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("processes");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(2, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(2, processDefs.size());
         // make sure it's properly sorted and paged
-        String value1 = ((JSONObject)processDefs.get(0)).getString("process-id");
+        String value1 = ((JsonObject)processDefs.get(0)).get("process-id").getAsString();
         assertEquals("3", value1);
-        String value2 = ((JSONObject)processDefs.get(1)).getString("process-id");
+        String value2 = ((JsonObject)processDefs.get(1)).get("process-id").getAsString();
         assertEquals("4", value2);
     }
 
@@ -437,19 +438,19 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String sorted = aggregate.aggregate(data, "ProcessId", false, 1, 2);
         logger.debug(sorted);
 
-        JSONObject aggregated = new JSONObject(sorted);
+        JsonObject aggregated = JsonParser.parseString(sorted).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("processes");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(2, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(2, processDefs.size());
         // make sure it's properly sorted and paged
-        String value1 = ((JSONObject)processDefs.get(0)).getString("process-id");
+        String value1 = ((JsonObject)processDefs.get(0)).get("process-id").getAsString();
         assertEquals("6", value1);
-        String value2 = ((JSONObject)processDefs.get(1)).getString("process-id");
+        String value2 = ((JsonObject)processDefs.get(1)).get("process-id").getAsString();
         assertEquals("5", value2);
     }
 
@@ -467,15 +468,15 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String sorted = aggregate.aggregate(data, "ProcessId", true, 5, 2);
         logger.debug(sorted);
 
-        JSONObject aggregated = new JSONObject(sorted);
+        JsonObject aggregated = JsonParser.parseString(sorted).getAsJsonObject();
         assertNotNull(aggregated);
 
         Object processes = aggregated.get("processes");
         assertNotNull(processes);
-        assertTrue(processes instanceof JSONArray);
+        assertTrue(processes instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) processes;
-        assertEquals(0, processDefs.length());
+        JsonArray processDefs = (JsonArray) processes;
+        assertEquals(0, processDefs.size());
 
     }
 
@@ -493,17 +494,17 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONObject aggregated = new JSONObject(result);
+        JsonObject aggregated = JsonParser.parseString(result).getAsJsonObject();
         assertNotNull(aggregated);
 
-        JSONObject content = (JSONObject)((JSONObject) aggregated.get("result")).get("kie-containers");
+        JsonObject content = (JsonObject) ((JsonObject) aggregated.get("result")).get("kie-containers");
 
         Object containers = content.get("kie-container");
         assertNotNull(containers);
-        assertTrue(containers instanceof JSONArray);
+        assertTrue(containers instanceof JsonArray);
 
-        JSONArray processDefs = (JSONArray) containers;
-        assertEquals(6, processDefs.length());
+        JsonArray processDefs = (JsonArray) containers;
+        assertEquals(6, processDefs.size());
     }
 
     @Test
@@ -520,9 +521,9 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data);
         logger.debug(result);
 
-        JSONArray aggregated = new JSONArray(result);
+        JsonArray aggregated = JsonParser.parseString(result).getAsJsonArray();
         assertNotNull(aggregated);
-        assertEquals(5, aggregated.length());
+        assertEquals(5, aggregated.size());
     }
 
     @Test
@@ -539,9 +540,9 @@ public class JSONAggregatorTest extends AbstractAggregateTest {
         String result = aggregate.aggregate(data, null, true, 1, 2);
         logger.debug(result);
 
-        JSONArray aggregated = new JSONArray(result);
+        JsonArray aggregated = JsonParser.parseString(result).getAsJsonArray();
         assertNotNull(aggregated);
-        assertEquals(2, aggregated.length());
+        assertEquals(2, aggregated.size());
     }
 }
 
