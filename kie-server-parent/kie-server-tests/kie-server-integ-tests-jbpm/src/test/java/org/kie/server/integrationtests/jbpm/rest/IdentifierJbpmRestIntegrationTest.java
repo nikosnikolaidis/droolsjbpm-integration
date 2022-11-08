@@ -24,9 +24,10 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.assertj.core.api.Assertions;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -105,9 +106,9 @@ public class IdentifierJbpmRestIntegrationTest extends RestJbpmBaseIntegrationTe
                 id = ((Long) wrapId);
             } else {
                 try {
-                    wrapId = new JSONObject(serialized);
-                    id = ((JSONObject) wrapId).getString("value");
-                } catch (JSONException ex) {
+                    wrapId = JsonParser.parseString(serialized).getAsJsonObject();
+                    id = ((JsonObject) wrapId).get("value");
+                } catch (JsonIOException ex) {
                     Assert.fail("expected json object from kie server " + ex.getMessage());
                 }
             }

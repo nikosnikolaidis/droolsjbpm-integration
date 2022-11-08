@@ -34,7 +34,7 @@ import com.github.tomakehurst.wiremock.client.MappingBuilder;
 import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 
-import org.json.JSONObject;
+import com.google.gson.JsonObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -108,13 +108,13 @@ public class KieServerRouterMultiNodeTest {
         serverUrl = "http://localhost:" + port;
 
         for (WireMockServer server : servers) {
-            JSONObject jsonData = new JSONObject();
+            JsonObject jsonData = new JsonObject();
 
-            jsonData.put("containerId", "some-container");
-            jsonData.put("alias", "some-alias");
-            jsonData.put("serverId", "some-id-" + server.port());
-            jsonData.put("serverUrl", "http://localhost:" + server.port());
-            jsonData.put("releaseId", "1.0.0.Final");
+            jsonData.addProperty("containerId", "some-container");
+            jsonData.addProperty("alias", "some-alias");
+            jsonData.addProperty("serverId", "some-id-" + server.port());
+            jsonData.addProperty("serverUrl", "http://localhost:" + server.port());
+            jsonData.addProperty("releaseId", "1.0.0.Final");
             String value = jsonData.toString();
             HttpURLConnection connection = (HttpURLConnection) URI.create(serverUrl + "/mgmt/add").toURL().openConnection();
             connection.setRequestMethod("POST");

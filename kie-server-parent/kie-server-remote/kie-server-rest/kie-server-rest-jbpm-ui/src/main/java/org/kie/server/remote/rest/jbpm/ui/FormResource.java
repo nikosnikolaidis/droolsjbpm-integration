@@ -50,15 +50,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.Variant;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.apache.commons.lang3.StringUtils;
 import org.jbpm.services.api.DeploymentNotFoundException;
 import org.jbpm.services.api.ProcessDefinitionNotFoundException;
 import org.jbpm.services.api.TaskNotFoundException;
 import org.jbpm.services.task.exception.PermissionDeniedException;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.XML;
 import org.kie.server.remote.rest.common.Header;
 import org.kie.server.services.api.KieServerRegistry;
 import org.kie.server.services.jbpm.ui.FormRendererBase;
@@ -323,38 +323,38 @@ public class FormResource {
         return null;
     }
 
-    private void formatJSONResponse(JSONObject json) {
+    private void formatJSONResponse(JsonObject json) {
         try {
-            JSONObject form = json.getJSONObject("form");
+            JsonObject form = json.get("form").getAsJsonObject();
             putPropertyArrayToObject(form);
             Object fields = form.get("field");
-            if (fields instanceof JSONArray) {
-                for (int i = 0; i < ((JSONArray)fields).length(); ++i) {
-                    JSONObject field = ((JSONArray)fields).getJSONObject(i);
+            if (fields instanceof JsonArray) {
+                for (int i = 0; i < ((JsonArray)fields).size(); ++i) {
+                    JsonObject field = ((JsonArray)fields).get(i).getAsJsonObject();
                     putPropertyArrayToObject(field);
                 }
             } else {
-                putPropertyArrayToObject((JSONObject)fields);
+                putPropertyArrayToObject((JsonObject) fields);
             }
-        } catch (JSONException e) {
+        } catch (JsonIOException e) {
             logger.debug("exception while formatting :: {}", e.getMessage(), e);
         }
     }
 
-    private void putPropertyArrayToObject(JSONObject obj) throws JSONException {
-        JSONArray properties = obj.getJSONArray("property");
-        for (int j = 0; j<properties.length(); ++j) {
-            JSONObject property = properties.getJSONObject(j);
-            obj.put(property.getString("name"), property.get("value"));
+    private void putPropertyArrayToObject(JsonObject obj) throws JsonIOException {
+        JsonArray properties = obj.getAsJsonArray("property");
+        for (int j = 0; j<properties.size(); ++j) {
+            JsonObject property = properties.get(j).getAsJsonObject();
+            obj.add(property.get("name").getAsString(), property.get("value"));
         }
         obj.remove("property");
     }
 
-    private Object parseToJSON(String content) throws JSONException{
+    private Object parseToJSON(String content) throws JsonIOException{
         try {
-            return new JSONArray(content);
-        } catch (JSONException e) {
-            return new JSONObject(content);
+            return JsonParser.parseString(content).getAsJsonArray();
+        } catch (JsonIOException e) {
+            return JsonParser.parseString(content).getAsJsonObject();
         }
     }
 }
